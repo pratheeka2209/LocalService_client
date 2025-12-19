@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api'
+const API_BASE_URL = 'https://localservice-server.onrender.com/api'
 
 // Auth API with fallback
 export const authAPI = {
