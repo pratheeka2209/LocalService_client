@@ -22,17 +22,20 @@ const Login = () => {
     setLoading(true)
     
     try {
+      console.log('🚀 Attempting login...', formData.email)
       const userData = await authAPI.login({
         email: formData.email,
         password: formData.password
       })
 
+      console.log('✅ Login successful:', userData)
       localStorage.setItem('token', userData.token)
       localStorage.setItem('user', JSON.stringify(userData))
       alert('Login successful!')
-      window.location.href = '/profile'
+      navigate('/profile')
     } catch (error) {
-      alert(error.message)
+      console.error('❌ Login error:', error)
+      alert(error.message || 'Login failed. Please check your credentials.')
     }
     
     setLoading(false)
@@ -53,34 +56,34 @@ const Login = () => {
           </p>
         </div>
         <form className="auth-form" onSubmit={handleSubmit}>
-          <div>
+          <div className="form-group">
             <input
               id="email"
               name="email"
               type="email"
               required
-              className="form-input form-input-rounded-top"
+              className="form-input"
               placeholder="Email address"
               value={formData.email}
               onChange={handleChange}
             />
+          </div>
+          <div className="form-group">
             <input
               id="password"
               name="password"
               type="password"
               required
-              className="form-input form-input-rounded-bottom"
+              className="form-input"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
             />
           </div>
 
-          <div>
-            <button type="submit" className="submit-btn hover-grow" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </div>
+          <button type="submit" className="submit-btn hover-grow" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign in'}
+          </button>
         </form>
       </div>
     </div>

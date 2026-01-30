@@ -3,6 +3,8 @@ import { bookingAPI } from '../services/api'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('All')
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -93,15 +95,45 @@ const Orders = () => {
     'Gardener': '+91 98765 43258'
   }
 
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = order.service.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.provider.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'All' || order.status === statusFilter
+    return matchesSearch && matchesStatus
+  })
+
   return (
     <div className="orders-container">
       <div className="orders-header">
         <h1>My Orders</h1>
         <p>Track and manage your service bookings</p>
+        
+        <div style={{display: 'flex', gap: '15px', marginTop: '20px', justifyContent: 'center', flexWrap: 'wrap'}}>
+          <input
+            type="text"
+            placeholder="Search orders..."
+            className="search-input"
+            style={{maxWidth: '300px'}}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            className="form-input"
+            style={{maxWidth: '150px'}}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All Status</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Completed">Completed</option>
+            <option value="Pending">Pending</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
       </div>
       
       <div className="orders-list">
-        {orders.map(order => (
+        {filteredOrders.map(order => (
           <div className="order-card" key={order.id}>
             <div className="order-header">
               <div className="order-info">
@@ -147,6 +179,12 @@ const Orders = () => {
           </div>
         ))}
       </div>
+      
+      {filteredOrders.length === 0 && orders.length > 0 && (
+        <div className="no-orders">
+          <p>No orders match your search criteria.</p>
+        </div>
+      )}
       
       {orders.length === 0 && (
         <div className="no-orders">

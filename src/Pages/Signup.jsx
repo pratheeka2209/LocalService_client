@@ -27,18 +27,24 @@ const Signup = () => {
     }
 
     try {
+      console.log('🚀 Starting signup process...')
+      console.log('📝 Form data:', formData)
+      
       const userData = await authAPI.register({
         name: formData.name,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        confirmPassword: formData.confirmPassword
       })
-
+      
+      console.log('✅ Signup successful:', userData)
       localStorage.setItem('token', userData.token)
       localStorage.setItem('user', JSON.stringify(userData))
       alert('Account created successfully!')
-      window.location.href = '/profile'
+      navigate('/profile')
     } catch (error) {
-      alert(error.message)
+      console.error('❌ Signup error:', error)
+      alert(error.message || 'Registration failed. Please try again.')
     }
   }
 

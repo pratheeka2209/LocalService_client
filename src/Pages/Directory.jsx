@@ -120,7 +120,9 @@ const Directory = () => {
       <div className="providers-grid">
         {filteredProviders.map(provider => (
           <div key={provider.id} className="provider-card hover-grow">
-            <div className="provider-image">{provider.image}</div>
+            <div className="provider-image" style={{background: '#3498db', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '120px', borderRadius: '4px', fontSize: '24px', fontWeight: 'bold'}}>
+              {provider.service.charAt(0)}
+            </div>
             <div className="provider-details">
               <h3>{provider.name}</h3>
               <p className="service-type">{provider.service}</p>

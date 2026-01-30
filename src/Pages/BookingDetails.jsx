@@ -80,33 +80,27 @@ const BookingDetails = () => {
     e.preventDefault()
     const totalAmount = serviceInfo.basePrice + 100
     
-    try {
-      const user = JSON.parse(localStorage.getItem('user'))
-      if (!user) {
-        alert('Please login first')
-        navigate('/login')
-        return
-      }
-
-      const mongoBooking = {
-        userId: user._id,
-        serviceId: serviceId,
-        serviceName: serviceInfo.name,
-        provider: serviceInfo.provider,
-        date: bookingData.date,
-        time: bookingData.time,
-        address: bookingData.address,
-        notes: bookingData.notes,
-        basePrice: serviceInfo.basePrice,
-        totalAmount: totalAmount
-      }
-
-      await bookingAPI.create(mongoBooking)
-      alert('Order is successfully placed!')
-      navigate('/orders')
-    } catch (error) {
-      alert(error.message)
+    const user = JSON.parse(localStorage.getItem('user'))
+    if (!user) {
+      alert('Please login first')
+      navigate('/login')
+      return
     }
+
+    const paymentData = {
+      serviceId: serviceId,
+      serviceName: serviceInfo.name,
+      provider: serviceInfo.provider,
+      date: bookingData.date,
+      time: bookingData.time,
+      address: bookingData.address,
+      notes: bookingData.notes,
+      basePrice: serviceInfo.basePrice,
+      totalAmount: totalAmount,
+      userId: user._id
+    }
+
+    navigate('/payment', { state: paymentData })
   }
 
   return (
@@ -182,7 +176,7 @@ const BookingDetails = () => {
           </div>
 
           <button type="submit" className="submit-btn">
-            Confirm Booking - Pay ₹{serviceInfo.basePrice + 100}
+            Proceed to Payment - ₹{serviceInfo.basePrice + 100}
           </button>
         </form>
       </div>

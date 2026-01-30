@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 const Header = () => {
   const [user, setUser] = useState(null)
   const [showDropdown, setShowDropdown] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    const userData = localStorage.getItem('user')
-    if (userData) {
-      setUser(JSON.parse(userData))
+    const checkUser = () => {
+      const userData = localStorage.getItem('user')
+      const token = localStorage.getItem('token')
+      if (userData && token) {
+        setUser(JSON.parse(userData))
+      } else {
+        setUser(null)
+      }
     }
-  }, [])
+    
+    checkUser()
+    
+    // Listen for storage changes (when user logs in/out in another tab)
+    window.addEventListener('storage', checkUser)
+    
+    return () => {
+      window.removeEventListener('storage', checkUser)
+    }
+  }, [location]) // Re-check when location changes
 
   const handleLogout = () => {
     localStorage.removeItem('user')
@@ -40,6 +55,15 @@ const Header = () => {
               <Link to='/orders' className="nav-link">My Orders</Link>
             </li>
           )}
+          <li>
+            <Link to='/reviews' className="nav-link">Reviews</Link>
+          </li>
+          <li>
+            <Link to='/help' className="nav-link">Help</Link>
+          </li>
+          <li>
+            <Link to='/about' className="nav-link">About</Link>
+          </li>
           {user ? (
             <li className="user-dropdown">
               <button 
@@ -56,8 +80,8 @@ const Header = () => {
                   <Link to='/my-account' className="dropdown-item" onClick={() => setShowDropdown(false)}>
                     💼 My Account
                   </Link>
-                  <Link to='/orders' className="dropdown-item" onClick={() => setShowDropdown(false)}>
-                    📋 My Orders
+                  <Link to='/reviews' className="dropdown-item" onClick={() => setShowDropdown(false)}>
+                    ⭐ Write Review
                   </Link>
                   <button onClick={handleLogout} className="dropdown-item logout-item">
                     🚪 Logout

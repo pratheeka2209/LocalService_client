@@ -11,6 +11,10 @@ import BookingDetails from './Pages/BookingDetails'
 import Orders from './Pages/Orders'
 import MyAccount from './Pages/MyAccount'
 import Profile from './Pages/Profile'
+import Payment from './Pages/Payment'
+import Reviews from './Pages/Reviews'
+import Help from './Pages/Help'
+import About from './Pages/About'
 import './styles.css'
 
 const App = () => {
@@ -29,6 +33,10 @@ const App = () => {
             <Route path="/orders" element={<Orders />} />
             <Route path="/my-account" element={<MyAccount />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </main>
         <Footer />
